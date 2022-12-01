@@ -3,7 +3,6 @@ package executor
 import (
 	"io"
 	"os"
-	"os/exec"
 )
 
 type Node struct {
@@ -56,8 +55,8 @@ func NewNodeWithType(left, right *Node, symbol Symbol, value interface{}, tp Typ
 	}
 }
 
-func (n *Node) Print() {
-	svgFile := "./node.svg"
+func (n *Node) PrintSvg(name string) {
+	svgFile := name + ".svg"
 	file, err := os.Create(svgFile)
 	if err != nil {
 		panic(err)
@@ -67,11 +66,9 @@ func (n *Node) Print() {
 		panic(err)
 	}
 	file.Close()
-	exec.Command("cmd", "/c", "start", svgFile).Start()
-	exec.Command("open", svgFile).Start()
 }
 
-func (n *Node) Eval(parameters Parameters) error {
+func (n *Node) Eval(parameters map[string]interface{}) error {
 	if n == nil {
 		return nil
 	}
@@ -96,7 +93,7 @@ func (n *Node) Eval(parameters Parameters) error {
 		}
 	}
 
-	ret, tp, err := n.operator(n, n.leftNode, n.rightNode, parameters)
+	ret, tp, err := n.operator(n, n.leftNode, n.rightNode, MapParameters(parameters))
 	if err != nil {
 		return err
 	}

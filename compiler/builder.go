@@ -160,6 +160,7 @@ func (b *Builder) Build() (*executor.Node, error) {
 	}
 
 	if b.rootPlanner != nil {
+		// TODO 树优化
 		return b.rootPlanner.plan(b)
 	}
 

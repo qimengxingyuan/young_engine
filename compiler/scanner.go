@@ -22,7 +22,6 @@ type Scanner struct {
 func NewScanner(source string) *Scanner {
 	runes := []rune(source)
 
-	// 可以留个坑
 	if len(runes) == 0 {
 		runes = append(runes, rune(eofRune))
 	}
@@ -96,9 +95,9 @@ func (scanner *Scanner) scanNumber() string {
 
 func (scanner *Scanner) scanString() (string, error) {
 	var err error
-	startPos := scanner.position
 	quote := scanner.read() // consume " or \'
-
+	startPos := scanner.position
+	endPos := scanner.position
 	for {
 		ch := scanner.read()
 		if isEof(ch) { // the scanner ends, but the terminator of string literal is not read
@@ -106,6 +105,7 @@ func (scanner *Scanner) scanString() (string, error) {
 			break
 		}
 		if ch == quote { // read the terminator of string literal
+			endPos = scanner.position - 1 // give up  " or \'
 			break
 		}
 
@@ -116,13 +116,14 @@ func (scanner *Scanner) scanString() (string, error) {
 		}
 	}
 
-	return string(scanner.source[startPos:scanner.position]), err
+	return string(scanner.source[startPos:endPos]), err
 }
 
 func (scanner *Scanner) scanRawString() (string, error) {
 	var err error
-	startPos := scanner.position
 	quote := scanner.read() // consume `
+	startPos := scanner.position
+	endPos := scanner.position
 
 	for {
 		ch := scanner.read()
@@ -132,11 +133,12 @@ func (scanner *Scanner) scanRawString() (string, error) {
 		}
 
 		if ch == quote {
+			endPos = scanner.position - 1 // consume `
 			break
 		}
 	}
 
-	lit := scanner.source[startPos:scanner.position]
+	lit := scanner.source[startPos:endPos]
 
 	return string(lit), err
 }

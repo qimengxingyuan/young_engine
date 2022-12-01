@@ -14,7 +14,7 @@ func TestParser_CheckBalance(t *testing.T) {
 	// 语法分析
 	parser := NewParser(tokens)
 	parser.Print()
-	err = parser.CheckBalance()
+	err = parser.checkBalance()
 	if err != nil {
 		t.Error(err)
 	}

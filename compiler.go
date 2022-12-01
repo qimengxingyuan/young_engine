@@ -6,7 +6,6 @@ import (
 )
 
 func Compiler(exp string) (*executor.Node, error) {
-
 	tokenScanner := compiler.NewScanner(exp)
 	tokens, err := tokenScanner.Lexer()
 	if err != nil {
@@ -14,11 +13,6 @@ func Compiler(exp string) (*executor.Node, error) {
 	}
 
 	parser := compiler.NewParser(tokens)
-	err = parser.CheckBalance()
-	if err != nil {
-		return nil, err
-	}
-
 	err = parser.ParseSyntax()
 	if err != nil {
 		return nil, err

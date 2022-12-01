@@ -34,8 +34,8 @@ func (p *Parser) hasNext() bool {
 	return p.index < p.tokenLength
 }
 
-// CheckBalance Checks the balance of tokens which have multiple parts, such as parenthesis.
-func (p *Parser) CheckBalance() error {
+// checkBalance Checks the balance of tokens which have multiple parts, such as parenthesis.
+func (p *Parser) checkBalance() error {
 	var parens int
 
 	for p.hasNext() {
@@ -53,11 +53,16 @@ func (p *Parser) CheckBalance() error {
 	if parens != 0 {
 		return errors.New("unbalanced parenthesis")
 	}
-	p.index = 0
+	p.Reset()
 	return nil
 }
 
 func (p *Parser) ParseSyntax() error {
+	err := p.checkBalance()
+	if err != nil {
+		return err
+	}
+
 	var lastTok token.Token
 	state, err := lastTok.Kind.GetLexerState()
 	for p.hasNext() {
@@ -78,7 +83,7 @@ func (p *Parser) ParseSyntax() error {
 	if !state.IsEOF() {
 		return errors.New("unexpected end of expression")
 	}
-	p.index = 0
+	p.Reset()
 	return nil
 }
 
@@ -86,4 +91,8 @@ func (p *Parser) Print() {
 	for i, tok := range p.tokens {
 		fmt.Printf("%3d: kind=[%s], val=[%v], pos=[%d]\n", i, tok.Kind, tok.Value, tok.Position)
 	}
+}
+
+func (p *Parser) Reset() {
+	p.index = 0
 }

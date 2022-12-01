@@ -1,25 +1,34 @@
 package young_engine
 
 import (
+	"os/exec"
 	"testing"
 	"time"
 )
 
 func TestCompiler(t *testing.T) {
 	//rule := `true || 7 > 9`
-	rule := `(29 > 10) || true || d > c + d`
+	//rule := `(29 > 10) || true || d > c + d`
 	//rule := `7 * 9 + 8 * 4`
+	//rule := "s1 != 'abc123' && s2 != 'abc\n123'"
+	rule := "\"abc\n1234\"== 'abc\n123'"
 	node, err := Compiler(rule)
 	if err != nil {
-		t.Log(err)
+		t.Error(err)
 	}
 
-	node.Print()
+	// print and open svg
+	node.PrintSvg("node")
+	exec.Command("cmd", "/c", "start", "node.svg").Start()
+	exec.Command("open", "node.svg").Start()
 	time.Sleep(1 * time.Second)
-	//err = node.Eval(executor.DummyParameters)
-	//if err != nil {
-	//	t.Log(err)
-	//} else {
-	//	t.Log(node.GetVal())
-	//}
+
+	// eval
+	params := map[string]interface{}{}
+	err = node.Eval(params)
+	if err != nil {
+		t.Error(err)
+	} else {
+		t.Log(node.GetVal())
+	}
 }

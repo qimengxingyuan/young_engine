@@ -1,6 +1,8 @@
 package executor
 
 import (
+	"bytes"
+	"encoding/xml"
 	"fmt"
 )
 
@@ -87,7 +89,10 @@ func (n *Node) xmlTree() string {
 					fillColor = colorGreen
 				}
 
-				textData := fmt.Sprintf("%v", List[i][j])
+				//textData := fmt.Sprintf("%v", List[i][j])
+				var b bytes.Buffer
+				xml.Escape(&b, []byte(fmt.Sprintf("%v", List[i][j])))
+				textData := b.String()
 				var x1, y1, x2, y2 int
 				if i > 0 {
 					x1 = x
@@ -111,10 +116,10 @@ func (n *Node) xmlTree() string {
 }
 
 func xmlNode(m, n, x, y, x1, y1, x2, y2 int, textData, cycleColor, textColor string) string {
-	id := fmt.Sprintf(`\t<g id="%d,%d">`, m, n)
+	id := fmt.Sprintf("<g id=\"%d,%d\">\n", m, n)
 	circle := xmlCircle(x, y, circleR, cycleColor)
 	text := xmlText(x, y, textData, textColor)
-	end := `</g>\n`
+	end := "</g>\n"
 
 	var line string
 	if x1 != 0 || y1 != 0 || x2 != 0 || y2 != 0 {
@@ -130,17 +135,17 @@ func xmlNode(m, n, x, y, x1, y1, x2, y2 int, textData, cycleColor, textColor str
 }
 
 func xmlCircle(x, y, r int, color string) string {
-	return fmt.Sprintf(`<circle cx="%d" cy="%d" r="%d" stroke="black" stroke-width="2" fill="%s" />`,
+	return fmt.Sprintf("<circle cx=\"%d\" cy=\"%d\" r=\"%d\" stroke=\"black\" stroke-width=\"2\" fill=\"%s\" />\n",
 		x, y, r, color)
 }
 
 func xmlText(x, y int, text, color string) string {
-	return fmt.Sprintf(`<text x="%d" y="%d" fill="%s" font-size="14" text-anchor="middle" dominant-baseline="middle">%s</text>`,
+	return fmt.Sprintf("<text x=\"%d\" y=\"%d\" fill=\"%s\" font-size=\"14\" text-anchor=\"middle\" dominant-baseline=\"middle\">%s</text>\n",
 		x, y, color, text)
 }
 
 func xmlLine(x1, y1, x2, y2 int) string {
-	return fmt.Sprintf(`<line x1="%d" y1="%d" x2="%d" y2="%d" style="stroke:black;stroke-width:2"/>`, x1, y1, x2, y2)
+	return fmt.Sprintf("<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:black;stroke-width:2\"/>\n", x1, y1, x2, y2)
 }
 
 func pow2(x int) int { //x>=0

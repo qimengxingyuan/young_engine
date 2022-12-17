@@ -2,6 +2,7 @@ package executor
 
 import (
 	"errors"
+	"fmt"
 	"math"
 )
 
@@ -180,7 +181,8 @@ func int2float(n interface{}) float64 {
 	case float64:
 		return v
 	default:
-		panic("unreachable code")
+		msg := fmt.Sprintf("unreachable code:%v", v)
+		panic(msg)
 	}
 }
 
@@ -191,7 +193,7 @@ func execNumberBinOp(l, r *Node, op Symbol) (interface{}, TypeFlags, error) {
 	var v3, v4 float64
 	isInt := t1 && t2
 	if !isInt || op == DIVIDE {
-		v3, v4 = int2float(l), int2float(r)
+		v3, v4 = int2float(l.value), int2float(r.value)
 	}
 	switch op {
 	case PLUS:

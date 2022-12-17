@@ -25,5 +25,5 @@ func singleBoolChecker(left *Node, right *Node) bool {
 }
 
 func singleNumberChecker(left *Node, right *Node) bool {
-	return right.tp.IsBool()
+	return right.tp.IsNumber()
 }

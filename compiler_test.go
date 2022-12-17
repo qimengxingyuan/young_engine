@@ -7,11 +7,12 @@ import (
 )
 
 func TestCompiler(t *testing.T) {
-	//rule := `true || 7 > 9`
-	//rule := `(29 > 10) || true || d > c + d`
-	//rule := `7 * 9 + 8 * 4`
+	rule := `!true || !!(7 > 9)`
+	//rule := `-8 + 2 - 4`
+	//rule := `7  * -9 + 8 * 9`
+	//rule := `--7  * -9 + -8 * 9`
 	//rule := "s1 != 'abc123' && s2 != 'abc\n123'"
-	rule := "\"abc\n1234\"== 'abc\n123'"
+	//rule := "\"abc\n1234\"== 'abc\n123'"
 	node, err := Compiler(rule)
 	if err != nil {
 		t.Error(err)

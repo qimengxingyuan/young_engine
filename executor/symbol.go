@@ -77,6 +77,11 @@ var (
 		MINUS: NEGATIVE,
 	}
 
+	needFixedSymbol = map[Symbol]bool{
+		POSITIVE:  true,
+		NEGATIVE: true,
+	}
+
 	symbolToOperator = map[Symbol]operator{
 		VALUE:    parameterOperator,
 		LITERAL:  literalOperator,

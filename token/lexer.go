@@ -208,6 +208,8 @@ var validLexerStates = map[Kind]LexerState{
 			IntegerLiteral, // 12345
 			FloatLiteral,   // 123.45
 			OpenParen,      // (
+			Addition,
+			Subtraction,
 		},
 	},
 	Divide: {
@@ -217,6 +219,8 @@ var validLexerStates = map[Kind]LexerState{
 			IntegerLiteral, // 12345
 			FloatLiteral,   // 123.45
 			OpenParen,      // (
+			Addition,
+			Subtraction,
 		},
 	},
 	Modulus: {
@@ -338,6 +342,7 @@ var validLexerStates = map[Kind]LexerState{
 			Identifier,  // variables
 			BoolLiteral, // true, false
 			OpenParen,   // (
+			Not,
 		},
 	},
 }

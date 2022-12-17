@@ -8,9 +8,9 @@ import (
 )
 
 // planner
-type planner func(builder *Builder) (*executor.Node, error)
+type planner func(builder *Builder, curPre *precedence) (*executor.Node, error)
 
-func planValue(builder *Builder) (*executor.Node, error) {
+func planValue(builder *Builder, curPre *precedence) (*executor.Node, error) {
 	if !builder.parser.hasNext() {
 		return nil, nil
 	}
@@ -47,7 +47,21 @@ func planValue(builder *Builder) (*executor.Node, error) {
 	case token.StringLiteral:
 		node := executor.NewNodeWithType(nil, nil, executor.LITERAL, tok.Value, executor.TypeString)
 		return node, nil
-	case token.Not, token.Subtraction, token.Addition:
+	case token.Subtraction:
+		ret, err := curPre.plan(builder)
+		if err != nil {
+			return nil, err
+		}
+		node := executor.NewNodeWithPrefixFix(ret, executor.NEGATIVE, nil)
+		return node, nil
+	case token.Addition: // token.Not,
+		ret, err := curPre.plan(builder)
+		if err != nil {
+			return nil, err
+		}
+		node := executor.NewNodeWithPrefixFix(ret, executor.POSITIVE, nil)
+		return node, nil
+	case token.Not:
 		builder.parser.rewind()
 		return nil, nil
 	default:
@@ -112,7 +126,7 @@ func (p *precedence) plan(builder *Builder) (*executor.Node, error) {
 			return nil, err
 		}
 	} else if p.planner != nil {
-		leftNode, err = p.planner(builder)
+		leftNode, err = p.planner(builder, p)
 		if err != nil {
 			return nil, err
 		}
@@ -135,7 +149,7 @@ func (p *precedence) plan(builder *Builder) (*executor.Node, error) {
 			return nil, err
 		}
 
-		node := executor.NewNodeWithPrefixFix(leftNode, rightNode, symbol, nil)
+		node := executor.NewNode(leftNode, rightNode, symbol, nil)
 		return node, nil
 	}
 	builder.parser.rewind()

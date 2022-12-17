@@ -25,17 +25,16 @@ type Node struct {
 //   it can be judged to be a negative sign. The symbol needs to be corrected
 // - If the right subtree of the right subtree is a symbol other than the prefix symbol [+、-],
 //	  The node order needs to be corrected
-func NewNodeWithPrefixFix(left, right *Node, symbol Symbol, value interface{}) *Node {
-	fixedSymbol, needFixed := fixedSymbolMap[symbol]
-	if left == nil && right != nil && needFixed {
-		symbol = fixedSymbol
-	}
-
-	if left == nil && right != nil && needFixed && right.rightNode != nil && right.symbol != NEGATIVE && right.symbol != POSITIVE {
-		right.leftNode = NewNode(left, right.leftNode, symbol, value)
+func NewNodeWithPrefixFix(right *Node, symbol Symbol, value interface{}) *Node {
+	 needFixed := needFixedSymbol[symbol]
+	 if !needFixed {
+		 panic("should not use this new node function for current symbol")
+	 }
+	if right != nil && right.rightNode != nil && right.symbol != NEGATIVE && right.symbol != POSITIVE {
+		right.leftNode = NewNode(nil, right.leftNode, symbol, value)
 		return right
 	} else {
-		return NewNode(left, right, symbol, value)
+		return NewNode(nil, right, symbol, value)
 	}
 }
 

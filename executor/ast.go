@@ -26,10 +26,10 @@ type Node struct {
 // - If the right subtree of the right subtree is a symbol other than the prefix symbol [+、-],
 //	  The node order needs to be corrected
 func NewNodeWithPrefixFix(right *Node, symbol Symbol, value interface{}) *Node {
-	 needFixed := needFixedSymbol[symbol]
-	 if !needFixed {
-		 panic("should not use this new node function for current symbol")
-	 }
+	needFixed := needFixedSymbol[symbol]
+	if !needFixed {
+		panic("should not use this new node function for current symbol")
+	}
 	if right != nil && right.rightNode != nil && right.symbol != NEGATIVE && right.symbol != POSITIVE {
 		right.leftNode = NewNode(nil, right.leftNode, symbol, value)
 		return right

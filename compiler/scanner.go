@@ -13,10 +13,10 @@ import (
 const eofRune = -1
 
 type Scanner struct {
-	source   []rune
-	position int
-	length   int
-	ch       rune
+	source   []rune // 规则表达式字符串
+	position int    // 遍历规则表达式过程中的位置
+	length   int    // 规则表达式字符串, 用于判断是否扫描结束
+	ch       rune   // position 位置对应的字符
 }
 
 func NewScanner(source string) *Scanner {
@@ -43,6 +43,7 @@ func (scanner *Scanner) read() rune {
 	}
 
 	char = scanner.source[scanner.position]
+
 	scanner.ch = scanner.peek()
 
 	scanner.position += 1
@@ -240,7 +241,7 @@ func (scanner *Scanner) Scan() (token.Token, error) {
 		if tok.Kind == token.BoolLiteral {
 			tok.Value = parseBool(literal)
 		}
-	case isDecimal(ch) || isDot(ch):
+	case isDecimal(ch) || isDot(ch): // 123  123.4  .678   7.7.7
 		// Decimal,
 		literal := scanner.scanNumber()
 		if strings.Contains(literal, ".") { // float

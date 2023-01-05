@@ -58,11 +58,13 @@ func (p *Parser) checkBalance() error {
 }
 
 func (p *Parser) ParseSyntax() error {
+	// '(a + (b > c)' is illegal
 	err := p.checkBalance()
 	if err != nil {
 		return err
 	}
 
+	// 'param1 + 100 param2' is illegal
 	var lastTok token.Token
 	state, err := lastTok.Kind.GetLexerState()
 	for p.hasNext() {
@@ -80,6 +82,7 @@ func (p *Parser) ParseSyntax() error {
 		lastTok = tok
 	}
 
+	// 'a + b +' is illegal
 	if !state.IsEOF() {
 		return errors.New("unexpected end of expression")
 	}

@@ -67,18 +67,8 @@ var (
 		token.Not: INVERT,
 	}
 
-	PrefixKindsToSymbol = map[token.Kind]Symbol{
-		token.Addition:    POSITIVE,
-		token.Subtraction: NEGATIVE,
-	}
-
-	fixedSymbolMap = map[Symbol]Symbol{
-		PLUS:  POSITIVE,
-		MINUS: NEGATIVE,
-	}
-
 	needFixedSymbol = map[Symbol]bool{
-		POSITIVE:  true,
+		POSITIVE: true,
 		NEGATIVE: true,
 	}
 
@@ -130,7 +120,7 @@ var (
 func (s Symbol) String() string {
 	switch s {
 	case NOOP:
-		return "NOOP"
+		return "()"
 	case VALUE:
 		return "VALUE"
 	case EQ:

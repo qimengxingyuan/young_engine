@@ -64,10 +64,10 @@
 ├── executor
 │   ├── ast.go      # 抽象语法树定义
 │   ├── operator.go # 语法树执行
-│   ├── svg.go      # 可是化打印语法树 - 辅助工具
+│   ├── svg.go      # 可视化打印语法树 - 辅助工具
 │   ├── symbol.go   # 符号定义
 │   ├── type.go     # 类型定义
-│   └── type_checker.go # 语法检查
+│   └── type_checker.go # 类型检查
 └── token
     ├── kind.go      # token类型
     ├── kind_test.go

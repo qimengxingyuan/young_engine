@@ -75,7 +75,7 @@
     └── token.go     # token定义
 ```
 
-![](./node.svg)
+![](image/node.svg)
 
 
 

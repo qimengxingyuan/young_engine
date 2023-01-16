@@ -77,6 +77,17 @@
 
 ![](image/node.svg)
 
+# 项目运行
+## 启动DB
+```shell
+docker-compose up
+```
+
+## 运行项目
+```shell
+go run ./main.go
+```
+
 
 
 

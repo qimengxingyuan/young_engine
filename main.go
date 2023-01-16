@@ -16,6 +16,10 @@ func main() {
 
 	g := r.Group("/api")
 	g.POST("/engine/run", handler.HandleRunRule)
+	g.POST("/engine/exp/new", handler.HandleAddExpression)
+	g.GET("/engine/exp/list", handler.HandleGetAllExpression)
+	g.DELETE("/engine/exp/:id", handler.HandleDeleteExpression)
+	g.POST("/engine/exp/run", handler.HandleRunExpression)
 
 	r.Spin()
 }

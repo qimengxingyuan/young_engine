@@ -21,6 +21,11 @@ func AddExpression(exp string) (*Expression, error) {
 	}
 }
 
+func GetGetExpressionByExp(exp string) (*Expression, error) {
+	var res *Expression
+	return res, DB.Model(&Expression{}).Where("exp = ?", exp).Find(&res).Error
+}
+
 func GetAllExpression() ([]*Expression, error) {
 	var res []*Expression
 	return res, DB.Model(&Expression{}).Find(&res).Error
